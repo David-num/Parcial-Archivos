@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json;
+using System;
 
 void write(List<Word> palabras, string fileName) {
   string ruta = Directory.GetCurrentDirectory() + $"/{fileName}.json";
@@ -46,13 +47,12 @@ void main() {
     string option = Console.ReadLine()!;
 
     if (option == "1") {
-      Console.WriteLine("Escriba la palabra: ");
+      Console.WriteLine("Ingresar el nombre del archivo: ");
       string word = Console.ReadLine()!;  
-      Console.WriteLine($"Escriba la definición: ");
+      Console.WriteLine($"Ingresar el contenido del archivo: ");
       string def = Console.ReadLine()!;
-      Console.WriteLine($"Ingrese la fecha: ");
-      string fech = Console.ReadLine()!;
-      palabras.Add(new Word(word, def, "False", fech, "No existe", "No existe"));
+      DateTime thisDay = DateTime.Today;
+      palabras.Add(new Word(word, def, "False", thisDay.ToString("d"), "No existe", "No existe"));
       palabras = sortWords(palabras);
       write(palabras, "FAT");
 
@@ -62,73 +62,140 @@ void main() {
       foreach(Word word in palabras) {
         if (word.papeleria == "False"){
           no += 1;
-          Console.WriteLine($"{no}- Nombre: {word.name}\n  Creación: {word.creation}\n  Modificación: {word.modification}");
+          Console.WriteLine($"{no}- Nombre: {word.name}\n   Cantidad de caracteres: {(word.definition).Length}\n   Creación: {word.creation}\n   Modificación: {word.modification}");
         }
       }     
 
     } else if (option == "3") {
-      bool found = false;
+      int no = 0;
+      Console.WriteLine("Listado de todas las palabras: ");
+      foreach(Word word in palabras) {
+        if (word.papeleria == "False"){
+          no += 1;
+          Console.WriteLine($"{no}- Nombre: {word.name}\n   Cantidad de caracteres: {(word.definition).Length}\n   Creación: {word.creation}\n   Modificación: {word.modification}");
+        }
+      }  
+      no = 0;   
       bool second = false;
-      Console.WriteLine("Escriba la palabra: ");
-      string buscar = Console.ReadLine()!;
+      Console.WriteLine("Ingrese el numero de archivo: ");
+      int buscar = Int32.Parse(Console.ReadLine()!);
       foreach (Word word1 in palabras) {
-        if (word1.name == buscar) {
-            if (word1.papeleria == "False"){
-                Console.WriteLine($"- Nombre: {buscar}\n  Creación: {word1.creation}\n  Modificación: {word1.modification}\n  Contenido: {word1.definition}");
-                second = true;
-            }
-          found = true;
+        if (word1.papeleria == "False"){
+          no += 1;
+          if (no == buscar){
+            Console.WriteLine($"- Nombre: {word1.name}\n  Cantidad de caracteres: {(word1.definition).Length}\n  Creación: {word1.creation}\n  Modificación: {word1.modification}\n  Contenido: {word1.definition}");
+            second = true;
+          }
         }
       }
-      if (!found) { Console.WriteLine("La palabra no ha sido encontrada. "); }
-      if (!second) { Console.WriteLine("La palabra fue eliminada. "); }
+      if (!second) { Console.WriteLine("La palabra no existe o fue eliminada. "); }
 
     } else if (option == "4") {
-      bool found = false;
-      Console.WriteLine("Escriba la palabra: ");
-      string word = Console.ReadLine()!;
-      Word? foundWord = null;
-       foreach (Word word1 in palabras) {
-        if (word1.name == word) {
-          foundWord = word1;
-          found = true;
+      int no = 0;
+      Console.WriteLine("Listado de todas las palabras: ");
+      foreach(Word word in palabras) {
+        if (word.papeleria == "False"){
+          no += 1;
+          Console.WriteLine($"{no}- Nombre: {word.name}\n   Cantidad de caracteres: {(word.definition).Length}\n   Creación: {word.creation}\n   Modificación: {word.modification}");
+        }
+      }  
+      no = 0;   
+      bool second = false;
+      Console.WriteLine("Ingrese el numero de archivo: ");
+      int buscar = Int32.Parse(Console.ReadLine()!);
+      List<Word> cont = read("FAT");
+      foreach (Word word1 in cont) {
+        if (word1.papeleria == "False"){
+          no += 1;
+          if (no == buscar){
+            Console.WriteLine($"- Nombre: {word1.name}\n  Cantidad de caracteres: {(word1.definition).Length}\n  Creación: {word1.creation}\n  Modificación: {word1.modification}\n  Contenido: {word1.definition}");
+            second = true;
+            Console.WriteLine("Ingrese el nuevo contenido");
+            string def = Console.ReadLine()!;
+            Console.WriteLine("Confirmación final");
+            Console.WriteLine("1. Confirmar");
+            Console.WriteLine("2. Calcelar");
+            string confirmación = Console.ReadLine()!;
+            if (confirmación == "1"){
+              DateTime thisDay = DateTime.Today;
+              word1.definition = def;
+              word1.modification = thisDay.ToString("d");
+              Console.WriteLine("El archivo fue editado con exito");
+            }
+          }
         }
       }
-      if (!found) { Console.WriteLine("La palabra no ha sido encontrada. "); } else {
-        palabras.Remove(foundWord!);
-      }
+      if (!second) { Console.WriteLine("La palabra no existe o fue eliminada. "); }
+      write(cont,"FAT");
 
     } else if (option == "5") {
-      bool found = false;
-      bool second = false;
-      List<Word> cont = read("FAT");
-      Console.WriteLine("Escriba la palabra: ");
-      string buscar = Console.ReadLine()!;
-      foreach (Word word1 in cont) {
-        if (word1.name == buscar) {
-            if (word1.papeleria == "False"){
-                Console.WriteLine($"- Nombre: {buscar}\n  Creación: {word1.creation}\n  Modificación: {word1.modification}\n  Contenido: {word1.definition}");
-                second = true;
-                Console.WriteLine("Confirmación final");
-                Console.WriteLine("1. Confirmar");
-                Console.WriteLine("2. Calcelar");
-                string confirmación = Console.ReadLine()!;
-                if (confirmación == "1"){
-                  Console.WriteLine("Ingrese la fecha actual");
-                  string papel = Console.ReadLine()!;
-                  word1.papeleria = "True";
-                  word1.eliminacion = papel;
-                }
-            }
-          found = true;
+      int no = 0;
+      Console.WriteLine("Listado de todas las palabras: ");
+      foreach(Word word in palabras) {
+        if (word.papeleria == "False"){
+          no += 1;
+          Console.WriteLine($"{no}- Nombre: {word.name}\n   Cantidad de caracteres: {(word.definition).Length}\n   Creación: {word.creation}\n   Modificación: {word.modification}");
         }
+      }  
+      no = 0;   
+      bool found = false;
+      List<Word> cont = read("FAT");
+      Console.WriteLine("Ingrese el numero de archivo: ");
+      int buscar = Int32.Parse(Console.ReadLine()!);
+      foreach (Word word1 in cont) {
+        if (word1.papeleria == "False"){
+          no += 1;
+          if (no == buscar){
+            Console.WriteLine($"- Nombre: {buscar}\n  Creación: {word1.creation}\n  Modificación: {word1.modification}\n  Contenido: {word1.definition}");
+            Console.WriteLine("Confirmación final");
+            Console.WriteLine("1. Confirmar");
+            Console.WriteLine("2. Calcelar");
+            string confirmación = Console.ReadLine()!;
+            if (confirmación == "1"){
+              DateTime thisDay = DateTime.Today;
+              word1.papeleria = "True";
+              word1.eliminacion = thisDay.ToString("d");
+              Console.WriteLine("El archivo fue eliminado con exito");
+            }
+          }
+        }
+        found = true;
       }
-      if (!found) { Console.WriteLine("La palabra no ha sido encontrada. "); }
-      if (!second) { Console.WriteLine("La palabra fue eliminada. "); }
+      if (!found) { Console.WriteLine("El archivo no existe o fue eliminado. "); }
       write(cont,"FAT");
     } else if (option == "6") {
-      Console.WriteLine("LISTADO DE PALABRAS ELIMINADAS: ");
-
+      int no = 0;
+      Console.WriteLine("Listado de todas las palabras: ");
+      foreach(Word word in palabras) {
+        if (word.papeleria == "True"){
+          no += 1;
+          Console.WriteLine($"{no}- Nombre: {word.name}\n   Cantidad de caracteres: {(word.definition).Length}\n   Creación: {word.creation}\n   Modificación: {word.modification}");
+        }
+      }     
+      no = 0;   
+      bool second = false;
+      Console.WriteLine("Ingrese el numero de archivo: ");
+      int buscar = Int32.Parse(Console.ReadLine()!);
+      List<Word> cont = read("FAT");
+      foreach (Word word1 in cont) {
+        if (word1.papeleria == "True"){
+          no += 1;
+          if (no == buscar){
+            second = true;
+            Console.WriteLine("Confirmación final");
+            Console.WriteLine("1. Confirmar");
+            Console.WriteLine("2. Calcelar");
+            string confirmación = Console.ReadLine()!;
+            if (confirmación == "1"){
+              word1.papeleria = "False";
+              word1.eliminacion = "No existe";
+              Console.WriteLine("El archivo fue restaurado con exito");
+            }
+          }
+        }
+      }
+      if (!second) { Console.WriteLine("El archivo no existe. "); }
+      write(cont,"FAT");
     } else if (option == "7") {
       break;
     }

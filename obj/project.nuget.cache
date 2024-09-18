@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i3IE89UHimw=",
+  "dgSpecHash": "c2au5V0iJJw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Proyecto\\Proyecto.csproj",
+  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Proyecto\\Parcial-Archivos\\Proyecto.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USUARIO\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
